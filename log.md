@@ -73,4 +73,12 @@ If we tell QEMU to make the disk read-only (and don't attempt to write),
 the guest doesn't try to issue commands 42 or 53, but the other used
 commands are identical.
 
+# Tue May 25
 
+Turns out, I'm not anywhere near patient enough to keep myself from
+coding until June 7. I've started writing some code, and gotten as far
+as receiving and returning a REPORT LUNS command from the BIOS. (Turns
+out, QEMU's SeaBIOS speaks virtio-scsi, so I don't even have to boot to
+start testing :).) The code at the moment is a huge hack that will blow
+up if the slightest thing goes wrong; I really need to sit down and
+figure out what the abstractions I want to build for myself.
