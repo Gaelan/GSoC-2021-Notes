@@ -82,3 +82,24 @@ out, QEMU's SeaBIOS speaks virtio-scsi, so I don't even have to boot to
 start testing :).) The code at the moment is a huge hack that will blow
 up if the slightest thing goes wrong; I really need to sit down and
 figure out what abstractions I want to build for myself.
+
+# Wed May 26
+
+Spent the day (I use that word here quite generously--this went
+embarassingly far past midnight) chasing some nasty bugs:
+
+- Declaring support for `VhostUserProtocolFeatures::SLAVE_REQ`, but not
+  implementing `set_slave_req_fd()`, causes QEMU to print out a
+  (harmless, it seems) erorr about an unexpected EOF.
+- Linux seems to insist on requesting the VIRTIO_SCSI_F_CHANGE feature
+  bit, even if I don't declare support for it - this causes
+  vhost-user-backend to error out with `HandleRequest(InvalidParam)`,
+  which is about as helpful as it sounds. Not sure what's going on here
+  (seems like a Linux bug, but it seems far more likely I'm missing
+  something). In any case, declaring support for that feature seems to
+  make the problem go away, and I think we can do so for free (it's
+  about reporting changes to the configuration of a LUN; I don't think
+  I'll be supporting such changes any time soon, so there's nothing to
+  do).
+
+
